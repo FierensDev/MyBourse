@@ -1,0 +1,10 @@
+services:
+  mybourse:
+    container_name: mybourse
+    image: node:24
+    working_dir: /app
+    volumes: 
+      - ./app:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host"

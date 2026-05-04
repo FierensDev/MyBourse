@@ -1,0 +1,1 @@
+export const API_URL: string = 'https://keligmartin.github.io/api/stocks.json';
