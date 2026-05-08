@@ -40,9 +40,9 @@ export csv
 
 ## Structure
 
-/api -> gestion des appels api
-/config/config.ts -> gestion des constantes (== .env)
-/errors -> gestion des erreurs
-/models -> interfaces et types
-/iu -> affichage
-/utils -> elements reutilisable
+/api -> gestion des appels api  
+/config/config.ts -> gestion des constantes (== .env)  
+/errors -> gestion des erreurs  
+/models -> interfaces et types  
+/iu -> affichage  
+/utils -> elements reutilisable  
