@@ -6,8 +6,12 @@ try {
   displayGlobalMessage('Chargements de l\'application...')
   const stocks = await fetchStocks();
   if(stocks){
+
+    let selectedStockSymbol: Stock | null = stocks[0].symbol
     //create the div that contain button to choose stock to display
-    displayButtonToSelectStock(stocks);
+    displayButtonToSelectStock(stocks, selectedStockSymbol);
+    // displayButtonToSelectTypeOfGraph(stocks, selectedStockSymbol);
+    renderChart();
   }
 
 } catch(e) {
@@ -32,14 +36,15 @@ function displayGlobalMessage(message: string): void
   app.innerHTML = message;
 }
 
-function displayButtonToSelectStock(stocks: Stock[]): void
+function displayButtonToSelectStock(stocks: Stock[], selectedStockSymbol: string | null): void
 {
   const app = document.getElementById('app')!;
   const container = createElement('div', 'container_select_stock')
   
   stocks.forEach(stock => {
     console.log(`deunsLog : `, stock)
-    const button = createElement('button', `stock_${stock.symbol}`)
+    let isActive = stock.symbol === selectedStockSymbol ? 'active' : '';
+    const button = createElement('button', `stock_${stock.symbol}`, isActive)
     button.textContent = stock.name
     container.appendChild(button);
   })
