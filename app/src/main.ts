@@ -1,20 +1,21 @@
 import { fetchStocks } from "./api/stocks.ts";
 import { renderChart } from "./charts/Chart.ts";
-import { CHART_TYPE, DAYS_TO_SUBSTRACT } from "./config/config.ts";
+import { CHART_TYPE, DAYS_TO_SUBTRACT } from "./config/config.ts";
 import { ApiError, NetworkError, NotFoundError, ParseError, UnauthorizedError } from "./errors/ApiErrors.ts";
 import type { ChartConfig, ChartType } from "./models/Chart.ts";
 import type { Stock } from "./models/Stock.ts";
 
 const chartConfig: ChartConfig  = {
   selectedStock: null,
-  daysToSubtract: DAYS_TO_SUBSTRACT[0].value,
+  daysToSubtract: DAYS_TO_SUBTRACT[0].value,
   type: 'bar'
+  
 }
 
 try {
   displayGlobalMessage('Chargements de l\'application...')
   const stocks = await fetchStocks();
-  console.log(`deunsLog : `, stocks)
+
   if(stocks){
     hideGlobalMessage();
     chartConfig.selectedStock = stocks[0];
@@ -28,15 +29,15 @@ try {
 
 } catch(e) {
   if (e instanceof UnauthorizedError) {
-    displayGlobalMessage('Accès non autorisé');
+    displayGlobalMessage('Accès non autorisé... Revenez plus tard');
   } else if (e instanceof NotFoundError) {
-    displayGlobalMessage('Données introuvables');
+    displayGlobalMessage('Données introuvables... Revenez plus tard');
   } else if (e instanceof ParseError) {
-    displayGlobalMessage('Données reçu JSON invalide');
+    displayGlobalMessage('Données reçu JSON invalide... Revenez plus tard');
   } else if (e instanceof ApiError) {
-    displayGlobalMessage('Erreur serveur.');
+    displayGlobalMessage('Erreur serveur... Revenez plus tard');
   } else if (e instanceof NetworkError) {
-    displayGlobalMessage('Impossible de joindre le serveur.');
+    displayGlobalMessage('Impossible de joindre le serveur... Revenez plus tard');
   } else {
     displayGlobalMessage('Revenez quand l\'api fonctionnera...');
   }
@@ -75,7 +76,6 @@ function displayButtonToSelectTypeOfGraph(selectedType: ChartType): void
     let isActive = type === selectedType ? 'active' : '';
     const button = createElement('button', `type_${type}`, `select_type ${isActive}`)
     button.textContent = type
-    button.dataset.type = type
     
     button.addEventListener('click',() => {
       container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
@@ -94,7 +94,7 @@ function displayButtonToSelectDayToSubstract(daysSubstracted: number): void
   const app = document.getElementById('app')!;
   const container = createElement('div', 'container_select_day_to_substract')
   
-  DAYS_TO_SUBSTRACT.forEach(day => {
+  DAYS_TO_SUBTRACT.forEach(day => {
     let isActive = day.value === daysSubstracted ? 'active' : '';
     const button = createElement('button', `type_${day.value}`, `select_day_to_substract ${isActive}`)
     button.textContent = day.label

@@ -26,6 +26,7 @@ export function renderChart(chartConfig: ChartConfig): void {
             data: stockOnDateRange.map(r => r.price)
           }
         ]
+        
       }
     }
   );
