@@ -1,4 +1,12 @@
 body{
-  background: rgb(103, 103, 103);
-  color: white;
+  /* background: rgb(103, 103, 103); */
+  /* color: white; */
+}
+
+.select_stock {
+  background: red;
+  
+  &.active {
+    background: green;
+  }
 }
