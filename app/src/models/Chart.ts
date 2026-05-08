@@ -1,7 +1,7 @@
 import type { Stock } from "./Stock";
 
 export interface ChartConfig {
-  selectedStock: Stock | null,
+  selectedStocks: Stock[],
   daysToSubtract: number,
   type: ChartType
 }

@@ -27,3 +27,8 @@ body{
     background: green;
   }
 }
+
+.error {
+  background: rgb(255, 206, 206);
+  border: 1px solid red;
+}

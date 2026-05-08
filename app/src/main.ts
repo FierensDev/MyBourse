@@ -6,21 +6,21 @@ import type { ChartConfig, ChartType } from "./models/Chart.ts";
 import type { Stock } from "./models/Stock.ts";
 
 const chartConfig: ChartConfig  = {
-  selectedStock: null,
+  selectedStocks: [],
   daysToSubtract: DAYS_TO_SUBTRACT[0].value,
   type: 'bar'
-  
+
 }
 
 try {
   displayGlobalMessage('Chargements de l\'application...')
   const stocks = await fetchStocks();
-
+  console.log(`deunsLog : `, stocks)
   if(stocks){
     hideGlobalMessage();
-    chartConfig.selectedStock = stocks[0];
+    chartConfig.selectedStocks.push(stocks[0]);
     
-    displayButtonToSelectStock(stocks, chartConfig.selectedStock.symbol);
+    displayButtonToSelectStock(stocks, chartConfig.selectedStocks[0].symbol);
     displayButtonToSelectTypeOfGraph(chartConfig.type);
     displayButtonToSelectDayToSubstract(chartConfig.daysToSubtract);
     
@@ -56,9 +56,21 @@ function displayButtonToSelectStock(stocks: Stock[], selectedStockSymbol: string
     button.dataset.symbol = stock.symbol
 
     button.addEventListener('click',() => {
-      container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      button.classList.add('active');
-      chartConfig.selectedStock = stocks.find(s => s.symbol === button.dataset.symbol) ?? null
+    
+      if(button.classList.contains('active') && container.querySelectorAll('button.active').length === 1){
+        displayMessage('error', 'Vous devez selectionner au moin une action')
+        return;
+      }
+
+      // return;
+      if(button.classList.contains('active')){
+        chartConfig.selectedStocks = chartConfig.selectedStocks.filter(s => s.symbol !== stock.symbol)
+        button.classList.remove('active')
+      } else {
+        chartConfig.selectedStocks.push(stock)
+        button.classList.add('active');
+      }
+      // console.log(`deunsLog : `, chartConfig.selectedStocks)
       renderChart(chartConfig);
     })
 
@@ -129,4 +141,16 @@ function createElement(tag: string = 'div', id: string = '', className: string =
   element.id = id;
   element.className = className
   return element;
+}
+
+function displayMessage(type = 'default', message: string):void
+{
+  const messageDiv = document.getElementById('message')!;
+  messageDiv.className = type === 'error' ? 'error' : ''
+  messageDiv.innerHTML = message
+
+  setTimeout(() => {
+    messageDiv.innerHTML = ''
+    messageDiv.className = '';
+  }, 2000)
 }

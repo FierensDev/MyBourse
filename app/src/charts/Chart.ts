@@ -5,14 +5,22 @@ import type { ChartConfig } from '../models/Chart';
 let chartInstance: Chart | null = null;
 
 export function renderChart(chartConfig: ChartConfig): void {
-  console.log(`deunsLog : `, chartConfig)
-  if(!chartConfig.selectedStock) return;
+  if(chartConfig.selectedStocks.length === 0) return;
   if (chartInstance) chartInstance.destroy();
 
   const dateRange = new Date(ACTUAL_DATE);
   dateRange.setDate(dateRange.getDate() - chartConfig.daysToSubtract)
 
-  const stockOnDateRange = chartConfig.selectedStock.history.filter(row => new Date(row.date) > dateRange)
+  const stockOnDateRange = chartConfig.selectedStocks[0].history.filter(row => new Date(row.date) > dateRange)
+
+  const stockDatasets: { label: string, data: number[] }[] = []
+
+  chartConfig.selectedStocks.forEach(stock => {
+    stockDatasets.push({
+      label: `Prix de l'action ${stock.name}`,
+      data: stock.history.filter(row => new Date(row.date) > dateRange).map(r => r.price)
+    })
+  });
 
   chartInstance = new Chart(
     document.getElementById('renderChart') as HTMLCanvasElement,
@@ -20,12 +28,7 @@ export function renderChart(chartConfig: ChartConfig): void {
       type: chartConfig.type,
       data: {
         labels: stockOnDateRange.map(r => r.date),
-        datasets: [
-          {
-            label: `Prix de l'action ${chartConfig.selectedStock.name}`,
-            data: stockOnDateRange.map(r => r.price)
-          }
-        ]
+        datasets: stockDatasets
         
       }
     }
