@@ -1,3 +1,4 @@
+//créer un element html pour avoir du code plus clair
 export function createElement(tag: string = 'div', id: string = '', className: string = ''): HTMLElement
 {
   const element: HTMLElement = document.createElement(tag);
@@ -6,6 +7,7 @@ export function createElement(tag: string = 'div', id: string = '', className: s
   return element;
 }
 
+//change de theme
 export function toggleTheme():void {
   document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
 }

@@ -3,7 +3,7 @@ import { ACTUAL_DATE } from '../config/config';
 import type { ChartConfig } from '../models/Chart';
 
 let chartInstance: Chart | null = null;
-
+//function qui permet de gerer l'affichage du graphique et de le rerendre si besoin
 export function renderChart(chartConfig: ChartConfig): void {
   if(chartConfig.selectedStocks.length === 0) return;
   if (chartInstance) chartInstance.destroy();

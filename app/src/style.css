@@ -14,27 +14,33 @@ body{
 }
 
 .select_stock {
-  background: red;
-  
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--text);
   &.active {
-    background: green;
+    background: var(--text);
+    color: var(--bg);
   }
 }
 
 
 .select_type {
-  background: red;
-  
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--text);
   &.active {
-    background: green;
+    background: var(--text);
+    color: var(--bg);
   }
 }
 
 .select_day_to_subtract {
-  background: red;
-  
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--text);
   &.active {
-    background: green;
+    background: var(--text);
+    color: var(--bg);
   }
 }
 
