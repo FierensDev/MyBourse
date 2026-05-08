@@ -1,6 +1,16 @@
+:root {
+  --text: #000;
+  --bg: #fff;
+}
+
+[data-theme="dark"]{
+  --text: #fff;
+  --bg: #000;
+}
+
 body{
-  /* background: rgb(103, 103, 103); */
-  /* color: white; */
+  background: var(--bg);
+  color: var(--text);
 }
 
 .select_stock {
@@ -20,7 +30,7 @@ body{
   }
 }
 
-.select_day_to_substract {
+.select_day_to_subtract {
   background: red;
   
   &.active {
