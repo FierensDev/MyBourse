@@ -1,27 +1,28 @@
 import Chart from 'chart.js/auto';
-import type { Stock } from '../models/Stock';
 import { ACTUAL_DATE } from '../config/config';
+import type { ChartConfig } from '../models/Chart';
 
 let chartInstance: Chart | null = null;
 
-export function renderChart(stock: Stock, type: string, daysToSubtract: number): void {
-
+export function renderChart(chartConfig: ChartConfig): void {
+  console.log(`deunsLog : `, chartConfig)
+  if(!chartConfig.selectedStock) return;
   if (chartInstance) chartInstance.destroy();
 
   const dateRange = new Date(ACTUAL_DATE);
-  dateRange.setDate(dateRange.getDate() - daysToSubtract)
+  dateRange.setDate(dateRange.getDate() - chartConfig.daysToSubtract)
 
-  const stockOnDateRange = stock.history.filter(r => new Date(r.date) > dateRange)
+  const stockOnDateRange = chartConfig.selectedStock.history.filter(row => new Date(row.date) > dateRange)
 
   chartInstance = new Chart(
     document.getElementById('renderChart') as HTMLCanvasElement,
     {
-      type: type,
+      type: chartConfig.type,
       data: {
         labels: stockOnDateRange.map(r => r.date),
         datasets: [
           {
-            label: `Prix de l'action ${stock.name}`,
+            label: `Prix de l'action ${chartConfig.selectedStock.name}`,
             data: stockOnDateRange.map(r => r.price)
           }
         ]

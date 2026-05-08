@@ -10,3 +10,20 @@ body{
     background: green;
   }
 }
+
+
+.select_type {
+  background: red;
+  
+  &.active {
+    background: green;
+  }
+}
+
+.select_day_to_substract {
+  background: red;
+  
+  &.active {
+    background: green;
+  }
+}

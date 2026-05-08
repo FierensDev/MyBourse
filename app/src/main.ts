@@ -1,16 +1,13 @@
 import { fetchStocks } from "./api/stocks.ts";
 import { renderChart } from "./charts/Chart.ts";
+import { CHART_TYPE, DAYS_TO_SUBSTRACT } from "./config/config.ts";
 import { ApiError, NetworkError, NotFoundError, ParseError, UnauthorizedError } from "./errors/ApiErrors.ts";
+import type { ChartConfig, ChartType } from "./models/Chart.ts";
 import type { Stock } from "./models/Stock.ts";
 
-//
-const chartConfig: {
-  stock: Stock | null,
-  days: number,
-  type: string
-} = {
-  stock: null,
-  days: 7,
+const chartConfig: ChartConfig  = {
+  selectedStock: null,
+  daysToSubtract: DAYS_TO_SUBSTRACT[0].value,
   type: 'bar'
 }
 
@@ -20,11 +17,13 @@ try {
   console.log(`deunsLog : `, stocks)
   if(stocks){
     hideGlobalMessage();
-    chartConfig.stock = stocks[0];
-    displayButtonToSelectStock(stocks, chartConfig.stock.symbol);
-    // displayButtonToSelectTypeOfGraph(stocks, selectedStockSymbol);
+    chartConfig.selectedStock = stocks[0];
     
-    renderChart(selectedStock, 'bar', 31);
+    displayButtonToSelectStock(stocks, chartConfig.selectedStock.symbol);
+    displayButtonToSelectTypeOfGraph(chartConfig.type);
+    displayButtonToSelectDayToSubstract(chartConfig.daysToSubtract);
+    
+    renderChart(chartConfig);
   }
 
 } catch(e) {
@@ -58,13 +57,57 @@ function displayButtonToSelectStock(stocks: Stock[], selectedStockSymbol: string
     button.addEventListener('click',() => {
       container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       button.classList.add('active');
-      selectedStock = stocks.find(s => s.symbol === button.dataset.symbol) ?? null
-      renderChart(selectedStock, 'bar', 7);
+      chartConfig.selectedStock = stocks.find(s => s.symbol === button.dataset.symbol) ?? null
+      renderChart(chartConfig);
     })
 
     container.appendChild(button);
   })
+  app.appendChild(container)
+}
 
+function displayButtonToSelectTypeOfGraph(selectedType: ChartType): void
+{
+  const app = document.getElementById('app')!;
+  const container = createElement('div', 'container_select_type_of_graph')
+  
+  CHART_TYPE.forEach(type => {
+    let isActive = type === selectedType ? 'active' : '';
+    const button = createElement('button', `type_${type}`, `select_type ${isActive}`)
+    button.textContent = type
+    button.dataset.type = type
+    
+    button.addEventListener('click',() => {
+      container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+      chartConfig.type = type
+      renderChart(chartConfig);
+    })
+
+    container.appendChild(button);
+  })
+  app.appendChild(container)
+}
+
+function displayButtonToSelectDayToSubstract(daysSubstracted: number): void
+{
+  const app = document.getElementById('app')!;
+  const container = createElement('div', 'container_select_day_to_substract')
+  
+  DAYS_TO_SUBSTRACT.forEach(day => {
+    let isActive = day.value === daysSubstracted ? 'active' : '';
+    const button = createElement('button', `type_${day.value}`, `select_day_to_substract ${isActive}`)
+    button.textContent = day.label
+    
+    button.addEventListener('click',() => {
+      container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+      chartConfig.daysToSubtract = day.value
+      renderChart(chartConfig);
+    })
+
+    container.appendChild(button);
+  })
   app.appendChild(container)
 }
 
