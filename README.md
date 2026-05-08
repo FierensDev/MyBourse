@@ -38,6 +38,8 @@ gestion des erreurs (réseau, api, données, utilisateur)(try,catch)
 dark mode (gerer avec l'attribut data-theme dans la balise body)
 export csv
 
+## Structure
+
 /api -> gestion des appels api
 /config/config.ts -> gestion des constantes (== .env)
 /errors -> gestion des erreurs
